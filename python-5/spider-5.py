@@ -82,7 +82,7 @@ class Product(Thread):
                 if urls_lock.acquire():             # 获得详情页URL列表的锁
                     last_url = self.__urls.pop()    # 弹出左后一个并删除
                     urls_lock.release()             # 释放锁
-                print("正在操作{}".format(self.__urls))
+                print("正在操作{}".format(last_url))
 
                 content = self.__res.get_content(last_url,"gb2312")
                 if content is not None:
@@ -95,7 +95,7 @@ class Product(Thread):
                             imgs_start_urls.extend(html)    # 将获取到的图片详情页URL添加到列表
                             imgs_lock.release()
 
-                    time.sleep(5)
+                    time.sleep(2)
                 else:
                     print("所有链接已经处理完毕")
             
@@ -170,10 +170,11 @@ class Consumer(Thread):
                         img_down_url = img_down_url.group(2)
                         filename = img_down_url[img_down_url.rindex("/")+1:]
                         self.download_img(filder,img_down_url,filename)     # 下载图片
+                        
 
                     else:
                         print("-"*40)
-                        print(content)
+                        #print(content)
                         break
                 
                 else:
@@ -182,7 +183,7 @@ class Consumer(Thread):
                     if imgs_lock.acquire():
                         imgs_start_urls.append(img_url)
                         imgs_lock.release()
-                
+                time.sleep(1)
                 start_index += 1
 
 if __name__ == '__main__':
@@ -192,7 +193,7 @@ if __name__ == '__main__':
     for i in range(1,2):
         p = Product(urls)
         p.start()
-    for i in range(1,2):
+    for i in range(1,5):
         c = Consumer()
         c.start()
 
