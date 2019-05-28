@@ -9,7 +9,6 @@
 '''
 
 import sys
-sys.path.append('c:\\Users\\QXD\\Documents\\python')
 import http_help as hh
 import re
 from threading import Thread,Lock
